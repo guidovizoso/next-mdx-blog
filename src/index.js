@@ -1,6 +1,6 @@
 const generateBlog = require('./generate-blog-index');
 
-class BlogIndexPlugin {
+class MDXCompassPlugin {
   constructor(options) {
     this.options = options;
   }
@@ -14,12 +14,12 @@ class BlogIndexPlugin {
 
   apply(compiler) {
     // Set up blog index at start
-    compiler.hooks.environment.tap('MyPlugin', () => {
+    compiler.hooks.environment.tap('MDXCompass', () => {
       generateBlog(this.options);
     });
 
     // Re generate blog index when MDX files change
-    compiler.hooks.watchRun.tap('MyPlugin', () => {
+    compiler.hooks.watchRun.tap('MDXCompass', () => {
       const changedFile = this.getChangedFiles(compiler);
 
       if (changedFile.find(file => file.includes('.mdx'))) {
@@ -38,7 +38,7 @@ module.exports = (nextConfig = {}) => {
         );
       }
 
-      config.plugins.push(new BlogIndexPlugin(nextConfig));
+      config.plugins.push(new MDXCompassPlugin(nextConfig));
 
       if (typeof nextConfig.webpack === 'function') {
         return nextConfig.webpack(config, options);
